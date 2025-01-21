@@ -5,7 +5,7 @@ export default function HeroSection() {
     <div className="relative w-full overflow-hidden">
       <div className="relative aspect-[4/3] w-full">
         <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot_20250118_194521_Chrome.jpg-ZVyPHeciXZd7kEPNjL8Ytjz6bky1jb.jpeg"
+          src="/nequihero.webp"
           alt="Person working with laptop and phone"
           fill
           className="object-cover"
