@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import Navbar from "@/components/navbar"
 import Header from "@/components/header"
+import SimularCredit from "@/components/simular-credit"
 
 export default function Home() {
   return (
@@ -87,6 +88,9 @@ export default function Home() {
 >
   <MessageCircle className="h-6 w-6" />
 </button>
+
+      {/* Credit simulation */}
+      <SimularCredit />
     </main>
   )
 }
