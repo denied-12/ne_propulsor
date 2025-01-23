@@ -4,9 +4,13 @@ import { Button } from "@/components/ui/button"
 import { MessageCircle } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import Navbar from "@/components/navbar"
+import Tabs from "@/components/tabs-section"
 import Header from "@/components/header"
+import StepsCredit from "@/components/creditSteps"
 import SimularCredit from "@/components/simular-credit"
+import HelpSection from "@/components/help-section"
+import Requirements from "@/components/requirements-section"
+import Footer from "@/components/footer"
 
 export default function Home() {
   return (
@@ -15,10 +19,10 @@ export default function Home() {
       <Header />
 
       {/* Main Content */}
-      <div className="flex flex-col lg:flex-row  min-h-[calc(100vh-80px)] relative">
+      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)] relative">
         {/* Left Content */}
         <div className="px-6 lg:px-16 lg:w-1/2 order-2 lg:order-1 relative z-10 py-8 lg:py-16">
-            <h4 className="text-[1.25rem] lg:text-[1.25rem] font-manrope text-[#200020]">Desembolsa hasta 25.000.000*</h4>
+          <h4 className="text-[1.25rem] font-manrope text-[#200020]">Desembolsa hasta 25.000.000*</h4>
           <h1 className="text-[48px] lg:text-[56px] leading-tight font-manrope text-[#200020]">
             Crédito<br />Propulsor
           </h1>
@@ -32,7 +36,7 @@ export default function Home() {
             <div className="flex items-start gap-6">
               <Image
                 src="/qr-propulsor.svg"
-                alt="QR Code"
+                alt="Código QR para solicitar crédito"
                 width={120}
                 height={120}
                 className="object-contain"
@@ -57,7 +61,7 @@ export default function Home() {
           <div className="block lg:hidden w-full">
             <Image
               src="/nequihero.webp"
-              alt="Person using laptop and phone"
+              alt="Persona usando laptop y teléfono"
               width={800}
               height={600}
               className="w-full h-auto"
@@ -66,31 +70,44 @@ export default function Home() {
           </div>
 
           {/* Desktop Image */}
-          <div className="hidden lg:block relative h-[calc(100vh-80px)] w-full">
-          <div className="h-full w-full">
+          <div className="hidden lg:block">
             <Image
-              src="https://cdn.prod.website-files.com/6317a229ebf7723658463b4b/66e1fee357522af9e8d1b06c_el%20mejor%20prestamo.webp"
-              alt="Person using phone and laptop"
-              fill
-              className="object-cover object-center z-10 clip-hero"
+              src="/hero-desk.png"
+              alt="Persona usando teléfono y laptop"
+              width={800}
+              height={600}
+              className="h-full w-full"
               priority
             />
-            </div>
           </div>
         </div>
       </div>
 
       {/* Help Button */}
       <button
-  className="lg:hidden fixed bottom-6 right-6
-   bg-[#200020] text-white p-2 rounded-full shadow-lg w-10 h-10 flex items-center justify-center"
-  aria-label="Ayuda"
->
-  <MessageCircle className="h-6 w-6" />
-</button>
+        className="lg:hidden fixed bottom-6 right-6 bg-[#200020] text-white p-2 rounded-full shadow-lg w-10 h-10 flex items-center justify-center"
+        aria-label="Abrir sección de ayuda"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </button>
+
+      {/* Credit Steps */}
+      <StepsCredit />
 
       {/* Credit simulation */}
       <SimularCredit />
+
+      {/* Tabs */}
+      <Tabs />
+
+      {/* Help Section */}
+      <HelpSection />
+
+      {/* Requirements */}
+      <Requirements />
+
+      {/* Footer */}
+      <Footer />
     </main>
   )
 }

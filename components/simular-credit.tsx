@@ -54,10 +54,23 @@ function App() {
                   )}
                 </button>
                 {openFaq === item.id && (
-                  <div className="px-4 pb-3 text-gray-600">
-                    {/* Add FAQ content here */}
-                    Contenido de la respuesta...
-                  </div>
+                    <div className="px-4 pb-3 text-gray-600">
+                    {item.id === 'use' && (
+                      <p>Aquí podrás revisar tus cuentas. Simula el valor que quisieras pedir y toma la mejor decisión conociendo a detalle lo que compone tu préstamo.</p>
+                    )}
+                    {item.id === 'fga' && (
+                      <p>La fianza o FGA es un porcentaje adicional que se suma al valor del préstamo para garantizar el pago del mismo.</p>
+                    )}
+                    {item.id === 'interest' && (
+                      <p>Los intereses E.A (Efectivo Anual) y E.M (Efectivo Mensual) son las tasas que se aplican al préstamo para calcular el costo del mismo.</p>
+                    )}
+                    {item.id === 'insurance' && (
+                      <p>El seguro es un monto adicional que se paga para cubrir cualquier eventualidad que pueda afectar el pago del préstamo.</p>
+                    )}
+                    {item.id === 'vtua' && (
+                      <p>VTUA es un término utilizado para describir el valor total de uso del activo, que incluye el préstamo y todos los costos adicionales.</p>
+                    )}
+                    </div>
                 )}
               </div>
             ))}
