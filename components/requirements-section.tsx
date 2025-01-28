@@ -2,7 +2,7 @@ import React from 'react';
 
 function App() {
   return (
-    <div className="min-h-screen bg-white p-8 md:p-16">
+    <div className="min-h-[755px] w-full bg-white p-8 md:p-16">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row">
           {/* Text content on the left */}

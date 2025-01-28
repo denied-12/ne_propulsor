@@ -11,6 +11,7 @@ import SimularCredit from "@/components/simular-credit"
 import HelpSection from "@/components/help-section"
 import Requirements from "@/components/requirements-section"
 import Footer from "@/components/footer"
+import Questions from '@/components/question';
 
 export default function Home() {
   return (
@@ -21,15 +22,15 @@ export default function Home() {
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)] relative">
         {/* Left Content */}
-        <div className="px-6 lg:px-16 lg:w-1/2 order-2 lg:order-1 relative z-10 py-8 lg:py-16">
-          <h4 className="text-[1.25rem] font-manrope text-[#200020]">Desembolsa hasta 25.000.000*</h4>
-          <h1 className="text-[48px] lg:text-[56px] leading-tight font-manrope text-[#200020]">
+        <div className="px-8 lg:px-24 lg:w-1/2 order-2 lg:order-1 relative z-10 py-8 lg:py-16">
+          <h4 className="text-[1.25rem] font-manrope font-normal text-[#200020] mb-2">Desembolsa hasta 25.000.000*</h4>
+          <h1 className="text-[40px] lg:text-[48px] leading-[1.1] font-manrope font-medium text-[#200020] mb-3">
             Crédito<br />Propulsor
           </h1>
-          <p className="text-gray-500 text-sm mb-6">
+          <p className="text-gray-600 text-sm mb-2 max-w-[400px]">
             *Crédito de Consumo de Libre inversión, el monto máximo depende de tu capacidad de endeudamiento y políticas internas
           </p>
-          <p className="text-xl mb-6">¡Recibe la plata de una en tu Nequi!</p>
+          <p className="text-xl mb-8">¡Recibe la plata de una en tu Nequi!</p>
 
           {/* QR Code - Desktop Only */}
           <div className="hidden lg:block mb-8">
@@ -41,7 +42,7 @@ export default function Home() {
                 height={120}
                 className="object-contain"
               />
-              <p className="text-lg mt-2">Escanea este código QR, descarga la app y pide tu crédito.</p>
+              <p className="text-base mt-2">Escanea este código QR, descarga la app y pide tu crédito.</p>
             </div>
           </div>
 
@@ -70,7 +71,7 @@ export default function Home() {
           </div>
 
           {/* Desktop Image */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:block  w-full">
             <Image
               src="/hero-desk.png"
               alt="Persona usando teléfono y laptop"
@@ -105,6 +106,8 @@ export default function Home() {
 
       {/* Requirements */}
       <Requirements />
+
+      <Questions />
 
       {/* Footer */}
       <Footer />

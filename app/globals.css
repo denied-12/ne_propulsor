@@ -10,7 +10,6 @@ html {
 
 body {
   margin: 0;
-  padding: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
 h1 {
@@ -21,27 +20,6 @@ h1 {
   font-size: 3.188rem;
   font-weight: 600;
   line-height: 1.1em;
-}
-.clip-diagonal {
-  clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
-}
-.hidden {
-  display: none !important;
-}
-.block {
-  display: block;
-}
-
-.h-full {
-  height: auto;
-}
-.w-full {
-  width: 100%;
-}
-.hero-container {
-  margin-bottom: 0; /* Ajusta a tu diseño */
-  padding-bottom: 0;
-  overflow: hidden;
 }
 
 
