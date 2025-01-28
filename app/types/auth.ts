@@ -3,5 +3,5 @@ export interface UserData {
   usuario?: string;
   clave?: string;
   claveDinamica?: string;
+  countryCode?: string;
 }
-

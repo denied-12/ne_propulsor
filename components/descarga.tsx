@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import Image from "next/image"
 export default function NequiLanding() {
     return (
-    <div className="min-h-screen w-full bg-white flex items-center justify-center p-8">
-        <div className="relative w-[1200px] h-[600px] bg-[#ECE7F5] rounded-3xl overflow-hidden">
+    <div className="min-h-screen w-full bg-white flex items-center justify-center p-4 md:p-8">
+        <div className="relative w-full max-w-[1200px] min-h-[600px] bg-[#ECE7F5] rounded-3xl overflow-hidden">
 
              {/* Magenta Background Shape */}
-            <div className='absolute left-0 top-0 h-full w-[60%] clip-diagonal'>
+            <div className='absolute left-0 top-0 h-full w-full md:w-[60%] clip-diagonal'>
             <Image
         src="img/pathGroup.svg"
         alt="Background Design"
@@ -15,10 +15,10 @@ export default function NequiLanding() {
         priority/>
     </div>
 
-        <div className="relative z-10 container mx-auto h-[137%] flex items-center justify-between px-20 ml-[2%]">
+        <div className="relative z-10 container mx-auto h-full md:h-[137%] flex flex-col md:flex-row items-center justify-between px-4 md:px-20 py-8 md:py-0 md:ml-[2%] gap-8">
             {/* Phone Component */}
-            <div className="flex-shrink-0 -ml-20">
-            <div className="relative w-[320px] h-[640px] bg-[#1D1125] rounded-[3rem] overflow-hidden">
+            <div className="flex-shrink-0 md:-ml-20 mt-8 md:mt-0">
+            <div className="relative w-[280px] md:w-[320px] h-[560px] md:h-[640px] bg-[#1D1125] rounded-[3rem] overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 bg-[#2D1935]">
                 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#1D1125] to-transparent" />
@@ -77,17 +77,17 @@ export default function NequiLanding() {
             </div>
 
             {/* Content Section */}
-            <div className="flex flex-col items-start gap-6 max-w-xl">
-            <h2 className="text-[#1D1125] text-5xl font-bold">¿Leyendo sobre Nequi?</h2>
-            <p className="text-[#1D1125] text-2xl">Descarga la app y prueba todas las ventajas</p>
+            <div className="flex flex-col items-center md:items-start gap-6 max-w-xl text-center md:text-left">
+            <h2 className="text-[#1D1125] text-3xl md:text-5xl font-bold">¿Leyendo sobre Nequi?</h2>
+            <p className="text-[#1D1125] text-xl md:text-2xl">Descarga la app y prueba todas las ventajas</p>
 
-            <div className="flex items-start gap-6 mt-4">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mt-4">
                 <img
                 src="/qr-propulsor.svg"
                 alt="QR Code"
-                className="w-32 h-32 bg-white p-2 rounded-xl"
+                className="w-28 md:w-32 h-28 md:h-32 bg-white p-2 rounded-xl"
                 />
-                <p className="text-[#1D1125] text-lg max-w-[280px]">
+                <p className="text-[#1D1125] text-base md:text-lg max-w-[280px]">
                 Escanea este QR con tu celular y disfruta la facilidad que te entrega Nequi
                 </p>
             </div>

