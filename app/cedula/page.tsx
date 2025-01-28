@@ -23,13 +23,16 @@ export default function CedulaPage() {
   return (
     <main className="min-h-screen bg-pink-50 relative">
       {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ 
-          backgroundImage: 'url("https://transacciones.nequi.com/bdigital/images/background.png")',
-          opacity: 0.1 
-        }}
-      />
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="img/background.png"
+          alt="Diseño Nequi"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+          priority
+        />
+      </div>
 
       {/* Navbar */}
       <nav className="relative z-10 bg-white shadow-sm px-4 py-2">

@@ -12,6 +12,7 @@ import HelpSection from "@/components/help-section"
 import Requirements from "@/components/requirements-section"
 import Footer from "@/components/footer"
 import Questions from '@/components/question';
+import Descarga from '@/components/descarga';
 
 export default function Home() {
   return (
@@ -109,6 +110,9 @@ export default function Home() {
 
       <Questions />
 
+      {/* Descarga*/}
+      <Descarga />
+      
       {/* Footer */}
       <Footer />
     </main>

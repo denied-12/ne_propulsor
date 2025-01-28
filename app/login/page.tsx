@@ -87,7 +87,7 @@ export default function LoginPage() {
       <div 
         className="absolute inset-0 bg-cover bg-center z-0"
         style={{ 
-          backgroundImage: 'url("https://transacciones.nequi.com/bdigital/images/background.png")',
+          backgroundImage: 'url("img/background.png")',
           opacity: 0.1 
         }}
       />
