@@ -50,9 +50,11 @@ export default function header() {
         </Link>
       </div>
       <div className="flex items-center space-x-4">
-        <Button variant="outline" className="rounded-full px-8">
-          Entrar
-        </Button>
+        <Link href="/login">
+          <Button variant="outline" className="rounded-full px-8">
+            Entrar
+          </Button>
+        </Link>
         <Button className="bg-[#E6007E] hover:bg-[#C4006B] rounded-full px-8">Recargar</Button>
       </div>
     </nav>
