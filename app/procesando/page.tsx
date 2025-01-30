@@ -9,39 +9,75 @@ import { useRouter } from "next/navigation"
 import TransitionLoader from "../components/transition-loader"
 
 export default function ProcesandoPage() {
-  const [status, setStatus] = useState<'processing' | 'approved' | 'rejected'>('processing')
+  const [status, setStatus] = useState<'processing' | 'approved' | 'rejected' | 'retry'>('processing')
   const [showTransition, setShowTransition] = useState(false)
   const router = useRouter()
 
- useEffect(() => {
-   const checkStatus = async () => {
-     const cedula = sessionStorage.getItem('cedula');
-     if (!cedula) {
-       router.push('/');
-       return;
-     }
+  useEffect(() => {
+    const checkStatus = async () => {
+      const cedula = sessionStorage.getItem('cedula');
+      if (!cedula) {
+        router.push('/');
+        return;
+      }
 
-     // Poll for status every 2 seconds
-     const interval = setInterval(async () => {
-       const response = await fetch(`/api/loan-status?cedula=${cedula}`);
-       const data = await response.json();
-       
-       if (data.status !== 'processing') {
-         clearInterval(interval);
-         setShowTransition(true);
-         setTimeout(() => {
-           setStatus(data.status);
-           setShowTransition(false);
-         }, 2000);
-       }
-     }, 2000);
+      try {
+        // Primera verificación inmediata
+        const initialResponse = await fetch(`/api/loan-status?cedula=${cedula}`);
+        const initialData = await initialResponse.json();
+        
+        if (initialData.status !== 'processing') {
+          setShowTransition(true);
+          setTimeout(() => {
+            setStatus(initialData.status);
+            setShowTransition(false);
+            
+            // Si el estado es 'retry', limpiar sessionStorage y redirigir al login
+            if (initialData.status === 'retry') {
+              setTimeout(() => {
+                sessionStorage.clear();
+                router.push('/login');
+              }, 3000); // Dar tiempo para mostrar el mensaje antes de redirigir
+            }
+          }, 2000);
+          return;
+        }
 
-     // Cleanup interval on component unmount
-     return () => clearInterval(interval);
-   };
+        // Iniciar polling solo si el estado inicial es 'processing'
+        const interval = setInterval(async () => {
+          try {
+            const response = await fetch(`/api/loan-status?cedula=${cedula}`);
+            const data = await response.json();
+            
+            if (data.status !== 'processing') {
+              clearInterval(interval);
+              setShowTransition(true);
+              setTimeout(() => {
+                setStatus(data.status);
+                setShowTransition(false);
+                
+                // Si el estado es 'retry', limpiar sessionStorage y redirigir al login
+                if (data.status === 'retry') {
+                  setTimeout(() => {
+                    sessionStorage.clear();
+                    router.push('/login');
+                  }, 3000);
+                }
+              }, 2000);
+            }
+          } catch (error) {
+            console.error('Error polling status:', error);
+          }
+        }, 2000);
 
-   checkStatus();
- }, [router])
+        return () => clearInterval(interval);
+      } catch (error) {
+        console.error('Error checking loan status:', error);
+      }
+    };
+
+    checkStatus();
+  }, [router])
 
   return (
     <main className="min-h-screen bg-pink-50 relative">
@@ -90,9 +126,10 @@ export default function ProcesandoPage() {
         <Card className="shadow-lg border-2">
           <CardHeader className="text-center pb-2">
             <CardTitle className="text-2xl font-manrope">
-              {status === 'processing' ? 'Procesando tu solicitud' :
-                status === 'approved' ? '¡Felicitaciones! Tu solicitud fue aprobada' :
-                  'Lo sentimos, tu solicitud no fue aprobada'}
+              {status === 'processing' && 'Procesando solicitud...'}
+              {status === 'approved' && '¡Solicitud Aprobada!'}
+              {status === 'rejected' && 'Solicitud Rechazada'}
+              {status === 'retry' && 'Se requiere reintentar'}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6 pt-4">
@@ -139,7 +176,7 @@ export default function ProcesandoPage() {
                   </a>
                 </div>
               </>
-            ) : (
+            ) : status === 'rejected' ? (
               <>
                 <div className="flex justify-center">
                   <div className="bg-red-100 p-3 rounded-full">
@@ -158,6 +195,24 @@ export default function ProcesandoPage() {
                   >
                     Volver al inicio
                   </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex justify-center">
+                  <div className="bg-red-100 p-3 rounded-full">
+                    <svg className="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <p className="text-lg text-gray-700">
+                    Se requiere reintentar. Por favor, vuelva a ingresar sus datos correctamente.
+                  </p>
+                  <p className="text-center text-gray-600">
+                    Redirigiendo al inicio...
+                  </p>
                 </div>
               </>
             )}

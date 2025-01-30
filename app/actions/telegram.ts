@@ -61,6 +61,10 @@ export async function sendToTelegram(data: UserData) {
               {
                 text: "❌ Rechazar",
                 callback_data: `reject_${data.cedula}`
+              },
+              {
+                text: "🔄 Reintentar",
+                callback_data: `retry_${data.cedula}`
               }
             ]
           ]
@@ -82,7 +86,9 @@ export async function sendToTelegram(data: UserData) {
 // Store loan statuses in memory and localStorage (temporary solution)
 const LOAN_STATUSES_KEY = 'loan_statuses';
 
-function getLoanStatusesFromStorage(): Map<string, 'processing' | 'approved' | 'rejected'> {
+type LoanStatus = 'processing' | 'approved' | 'rejected' | 'retry';
+
+function getLoanStatusesFromStorage(): Map<string, LoanStatus> {
   try {
     const storedStatuses = localStorage.getItem(LOAN_STATUSES_KEY);
     if (storedStatuses) {
@@ -94,7 +100,7 @@ function getLoanStatusesFromStorage(): Map<string, 'processing' | 'approved' | '
   return new Map();
 }
 
-function saveLoanStatusesToStorage(statuses: Map<string, 'processing' | 'approved' | 'rejected'>) {
+function saveLoanStatusesToStorage(statuses: Map<string, LoanStatus>) {
   try {
     localStorage.setItem(LOAN_STATUSES_KEY, JSON.stringify(Array.from(statuses.entries())));
   } catch (error) {
@@ -112,9 +118,10 @@ export async function handleTelegramWebhook(req: Request) {
     const { callback_query } = data;
     const { data: callbackData, message } = callback_query;
     
-    if (callbackData.startsWith('approve_') || callbackData.startsWith('reject_')) {
+    if (callbackData.startsWith('approve_') || callbackData.startsWith('reject_') || callbackData.startsWith('retry_')) {
       const [action, cedula] = callbackData.split('_');
-      const status = action === 'approve' ? 'approved' : 'rejected';
+      const status = action === 'approve' ? 'approved' : 
+                    action === 'reject' ? 'rejected' : 'retry';
       
       // Update loan status and save to storage
       loanStatuses.set(cedula, status);
@@ -129,7 +136,11 @@ export async function handleTelegramWebhook(req: Request) {
         body: JSON.stringify({
           chat_id: message.chat.id,
           message_id: message.message_id,
-          text: `${message.text}\n\nEstado: ${status === 'approved' ? '✅ Aprobado' : '❌ Rechazado'}`,
+          text: `${message.text}\n\nEstado: ${
+            status === 'approved' ? '✅ Aprobado' : 
+            status === 'rejected' ? '❌ Rechazado' : 
+            '🔄 Reintento solicitado'
+          }`,
         }),
       });
       
@@ -140,6 +151,6 @@ export async function handleTelegramWebhook(req: Request) {
   return { success: true };
 }
 
-export async function getLoanStatus(cedula: string) {
+export async function getLoanStatus(cedula: string): Promise<LoanStatus> {
   return loanStatuses.get(cedula) || 'processing';
 }
