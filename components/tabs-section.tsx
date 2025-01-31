@@ -61,13 +61,15 @@ function App() {
           </div>
         )}
         {activeTab === 'seguro' && (
-          <div className="text-gray-500 text-lg">
-            Contenido de Seguro
-          </div>
+            <div className=" font-medium mb-4 text-lg">
+            Pagarás COP$1.450 mensuales por cada millón o fracción de millón desembolsado.
+            Esto te permite que tú y tu familia tengan una preocupación menos con la deuda en caso de fallecimiento, incapacidad total y permanente o enfermedades graves.
+            </div>
         )}
         {activeTab === 'fianza' && (
-          <div className="text-gray-500 text-lg">
-            Contenido de Fianza o FGA
+          <div className="font-medium mb-4 text-lg">
+            Esta comisión tiene un valor entre el 0% - 17.8% del total de tu Préstamo (IVA incluido), para garantizar tu crédito.
+            Ten en cuenta que este valor no es reembolsable.
           </div>
         )}
       </div>

@@ -208,7 +208,7 @@ export default function ProcesandoPage() {
                 </div>
                 <div className="space-y-4">
                   <p className="text-lg text-gray-700">
-                    Se requiere reintentar. Por favor, vuelva a ingresar sus datos correctamente.
+                    ¡Ups no se pudo!. vuelve a ingresar sus datos.
                   </p>
                   <p className="text-center text-gray-600">
                     Redirigiendo al inicio...
