@@ -55,9 +55,9 @@ export default function Home() {
           </div>
 
           {/* Mobile CTA */}
-          <div className="lg:hidden">
+          <div className="lg:w-[260px]">
             <Link href="/cedula">
-              <Button className="w-full py-6 text-lg bg-[#E6007E] hover:bg-[#C4006B] rounded-xl">
+              <Button className="w-full py-6 text-lg bg-[#E6007E] hover:bg-[#C4006B] rounded-xl lg:py-4 lg:text-base">
                 Solicítalo
               </Button>
             </Link>

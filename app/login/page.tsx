@@ -177,7 +177,7 @@ export default function LoginPage() {
                 </div>
                 <div className="space-y-2">
                   <Input
-                    type="text"
+                    type="number"
                     id="claveDinamica"
                     required
                     maxLength={6}
