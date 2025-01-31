@@ -139,7 +139,7 @@ export default function ProcesandoPage() {
                     En este momento no podemos aprobar tu solicitud. Te invitamos a intentarlo nuevamente en unos dias.
                   </p>
                   <Button
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/page')}
                     className="bg-[#E6007E] hover:bg-[#C4006B] text-white px-8 py-2 rounded-xl"
                   >
                     Volver al inicio

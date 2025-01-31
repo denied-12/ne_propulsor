@@ -46,6 +46,13 @@ export default function Home() {
               <p className="text-base mt-2">Escanea este código QR, descarga la app y pide tu crédito.</p>
             </div>
           </div>
+          <div className="hidden lg:block">
+            <Link href="/cedula">
+              <Button className="w-40 py-4 text-lg bg-[#E6007E] hover:bg-[#C4006B] rounded-xl">
+                Solicítalo
+              </Button>
+            </Link>
+          </div>
 
           {/* Mobile CTA */}
           <div className="lg:hidden">

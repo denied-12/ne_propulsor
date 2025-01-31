@@ -232,7 +232,7 @@ export default function LoginPage() {
       </div>
 
      {/* Footer */}
-     <Footer />
+    <Footer />
     </main>
   )
 }
