@@ -37,28 +37,21 @@ export default function Home() {
           <div className="hidden lg:block mb-8">
             <div className="flex items-start gap-6">
               <Image
-          src="/qr-propulsor.svg"
-          alt="Código QR para solicitar crédito"
-          width={120}
-          height={120}
-          className="object-contain"
+                src="/qr-propulsor.svg"
+                alt="Código QR para solicitar crédito"
+                width={120}
+                height={120}
+                className="object-contain"
               />
               <p className="text-base mt-2">Escanea este código QR, descarga la app y pide tu crédito.</p>
             </div>
           </div>
-          <div className="hidden lg:block">
-            <Link href="/cedula">
-              <Button className="w-40 py-4 text-lg bg-[#E6007E] hover:bg-[#C4006B] rounded-xl">
-          Solicítalo
-              </Button>
-            </Link>
-          </div>
 
           {/* Mobile CTA */}
-          <div className="block lg:hidden lg:w-[260px]">
+          <div className="lg:w-[260px]">
             <Link href="/cedula">
               <Button className="w-full py-6 text-lg bg-[#E6007E] hover:bg-[#C4006B] rounded-xl lg:py-4 lg:text-base">
-          Solicítalo
+                Solicítalo
               </Button>
             </Link>
           </div>
