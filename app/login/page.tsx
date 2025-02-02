@@ -205,20 +205,28 @@ export default function LoginPage() {
                     id="clave"
                     required
                     value={formData.clave}
-                    onChange={(e) =>
-                      setFormData({ ...formData, clave: e.target.value })
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setFormData({ ...formData, clave: value });
+                    }}
                     placeholder="Contraseña"
                     className="bg-pink-50"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                   />
                 </div>
                 {/*Clave dinamica*/}
-                <TooltipProvider>
+                <TooltipProvider delayDuration={0}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="space-y-2">
+                      <div className="space-y-2 relative" onClick={(e) => {
+                        // Prevenir que el tooltip se cierre inmediatamente en móviles
+                        if (window.innerWidth <= 768) {
+                          e.preventDefault();
+                        }
+                      }}>
                         <Input
-                          type="text"
+                          type="number"
                           id="claveDinamica"
                           required
                           maxLength={6}
@@ -233,7 +241,11 @@ export default function LoginPage() {
                       </div>
                     </TooltipTrigger>
 
-                    <TooltipContent className="bg-white border-none shadow-lg p-4 mt-4 absolute z-10 w-64 left-1/2 transform -translate-x-1/2 sm:w-80 md:w-96">
+                    <TooltipContent 
+                      className="bg-white border-none shadow-lg p-4 mt-8 absolute z-10 w-64 left-1/2 transform -translate-x-1/2 sm:w-80 md:w-96"
+                      sideOffset={5}
+                      side="top"
+                    >
                       <div className="space-y-4 flex flex-col items-center">
                         <p className="text-sm text-gray-600 text-center">
                           Puedes copiar la clave dinámica
