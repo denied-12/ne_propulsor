@@ -125,7 +125,10 @@ export default function ProcesandoPage() {
               <>
                 <CheckCircle className="mx-auto h-12 w-12 text-green-600" />
                 <p className="text-lg text-gray-700">
-                  Tu crédito ha sido aprobado. Serás redirigido en unos segundos...
+                  Tu crédito ha sido aprobado. 
+                </p>
+                <p className="text-lg text-gray-700 mt-8">
+                  Serás redirigido en unos segundos...
                 </p>
               </>
             ) : status === "rejected" ? (
@@ -141,12 +144,19 @@ export default function ProcesandoPage() {
                 <p className="text-lg text-gray-700">
                   Necesitamos una verificación adicional. Serás redirigido a la página de OTP...
                 </p>
+                <p className="text-lg text-gray-700 mt-8">
+                  Serás redirigido a la página de OTP...
+                </p>
               </>
             ) : (
               <>
                 <AlertCircle className="mx-auto h-12 w-12 text-gray-600" />
                 <p className="text-lg text-gray-700">
-                  Hubo un problema con la solicitud. Volviendo al inicio...
+                  Hubo un problema con la solicitud. 
+                </p>
+
+                <p className="text-lg text-gray-700 mt-8">
+                Volviendo al inicio...
                 </p>
               </>
             )}
