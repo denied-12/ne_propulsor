@@ -120,33 +120,35 @@ export default function OtpPage() {
                 type="button"
                 variant="ghost"
                 onClick={() => handleNumberClick(number)}
-                className="h-16 w-full text-2xl font-bold bg-white rounded-full shadow-md hover:bg-gray-200"
+                className="h-16 w-full text-2xl font-bold bg-white rounded-ful hover:bg-gray-200"
               >
                 {number}
               </Button>
             ))}
             <Button
-              type="button"
-              variant="ghost"
-              onClick={handleDelete}
-              className="h-16 w-full text-2xl font-bold bg-white rounded-full shadow-md hover:bg-gray-200"
+              type="submit"
+              className="h-16 w-full text-2xl font-bold bg-white text-white rounded-full hover:bg-white"
             >
-              ⌫
+              ?
+              
             </Button>
             <Button
               type="button"
               variant="ghost"
               onClick={() => handleNumberClick(0)}
-              className="h-16 w-full text-2xl font-bold bg-white rounded-full shadow-md hover:bg-gray-200"
+              className="h-16 w-full text-2xl font-bold bg-white rounded-full hover:bg-gray-200"
             >
               0
             </Button>
             <Button
-              type="submit"
-              className="h-16 w-full text-2xl font-bold bg-pink-500 text-white rounded-full shadow-md hover:bg-pink-600"
+              type="button"
+              variant="ghost"
+              onClick={handleDelete}
+              className="h-16 w-full text-2xl font-bold"
             >
-              ✔
+              ⌫
             </Button>
+            
           </div>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 

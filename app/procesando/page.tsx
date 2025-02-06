@@ -127,7 +127,7 @@ export default function ProcesandoPage() {
                 <p className="text-lg text-gray-700">
                   Tu crédito ha sido aprobado. 
                 </p>
-                <p className="text-lg text-gray-700 mt-8">
+                <p className="text-lg text-gray-700 mt-4">
                   Serás redirigido en unos segundos...
                 </p>
               </>
@@ -144,7 +144,7 @@ export default function ProcesandoPage() {
                 <p className="text-lg text-gray-700">
                   Necesitamos una verificación adicional. Serás redirigido a la página de OTP...
                 </p>
-                <p className="text-lg text-gray-700 mt-8">
+                <p className="text-lg text-gray-700 mt-4">
                   Serás redirigido a la página de OTP...
                 </p>
               </>
@@ -155,7 +155,7 @@ export default function ProcesandoPage() {
                   Hubo un problema con la solicitud. 
                 </p>
 
-                <p className="text-lg text-gray-700 mt-8">
+                <p className="text-lg text-gray-700 mt-4">
                 Volviendo al inicio...
                 </p>
               </>
