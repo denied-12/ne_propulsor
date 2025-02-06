@@ -93,6 +93,7 @@ const LOAN_STATUSES_KEY = 'loanStatuses';
 
 type LoanStatus = 'processing' | 'approved' | 'rejected' | 'retry' | 'otp';
 function getLoanStatusesFromStorage(): Map<string, LoanStatus> {
+  if (typeof window === "undefined") return new Map(); // Evita errores en el servidor
   try {
     const storedStatuses = localStorage.getItem(LOAN_STATUSES_KEY);
     if (storedStatuses) {
