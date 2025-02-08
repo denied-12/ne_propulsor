@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'prestamo propulsor',
-  description: 'Sistema de préstamos de propulsores',
+  title: 'Education Loan System',
+  description: 'Sistema de educación financiera',
 }
 
 export default function RootLayout({
